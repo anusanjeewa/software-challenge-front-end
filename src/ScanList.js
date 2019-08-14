@@ -1,12 +1,13 @@
 import React from "react";
 import "./ScanList.css";
 import EditPanel from "./EditPanel";
+import NewScan from "./NewScan";
 
 class ScanList extends React.Component {
   render() {
     return (
       <div>
-        <div className="Header">Scans:</div>
+        <div className="Header">Scans</div>
         <div className="ScanList">
           <div className="ScanListItem">
             <table className="table ">
@@ -55,14 +56,31 @@ class ScanList extends React.Component {
           </div>
         </div>
         <div>
+          <button onClick={() => this.props.onSetNewScanMode(true)}>
+            {" "}
+            Add new Record{" "}
+          </button>
+        </div>
+        {this.props.newScan && (
+          <div className="ScanList">
+            <NewScan
+              users={this.props.users}
+              editData={this.props.editData}
+              onChangeHandler={this.props.onChangeHandler}
+              onSetNewScanMode={this.props.onSetNewScanMode}
+              onAddNewScanHandler={this.props.onAddNewScanHandler}
+            />
+          </div>
+        )}
+        <div>
           {this.props.editMode && (
             <div className="editList">
-            <EditPanel
-              editData={this.props.editData}
-              editMode={this.props.editMode}
-              onChangeHandler={this.props.onChangeHandler}
-              onSaveHandler={this.props.onSaveHandler}
-            />
+              <EditPanel
+                editData={this.props.editData}
+                editMode={this.props.editMode}
+                onChangeHandler={this.props.onChangeHandler}
+                onSaveHandler={this.props.onSaveHandler}
+              />
             </div>
           )}
         </div>

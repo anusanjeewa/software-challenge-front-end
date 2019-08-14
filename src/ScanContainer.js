@@ -17,6 +17,7 @@ class ScanContainer extends React.Component {
       username: ""
     },
     editMode: false,
+    newScan: false,
   };
   onSortHandler = sortBy => {
     this.setState({
@@ -37,6 +38,7 @@ class ScanContainer extends React.Component {
       editMode: true
     });
   };
+
   onChangeHandler = fieldName => value => {
     this.setState({
       ...this.state,
@@ -81,10 +83,40 @@ class ScanContainer extends React.Component {
         username: ""}
     });
   };
+  onSetNewScanMode = (mode) => {   
+    this.setState({
+      ...this.state,
+      newScan: mode
+    });
+   };
+
+  onAddNewScanHandler = () => {
+    alert(this.state.editData.scannedByUserId);
+    const currScans = this.state.scans;    
+    const updatedScans = currScans.concat([
+      {
+        name: this.state.editData.name,
+        elevationMax: this.state.editData.elevationMax,
+        elevationMin: this.state.editData.elevationMin,
+        scannedByUserId: 0
+      }
+    ]);
+    const newSortedArray = getFlattenData(updatedScans, this.state.users);
+    this.setState({
+      ...this.state,
+      scans: updatedScans,
+      editData: {},
+      sortedArray: newSortedArray,
+      newScan: false
+    })
+
+  };
+
   render() {
     return (
       <div>
         <ScanList
+          users={this.state.users}
           sortedArray={
             this.state.sortedArray.length > 0
               ? this.state.sortedArray
@@ -96,6 +128,9 @@ class ScanContainer extends React.Component {
           editMode={this.state.editMode}
           onChangeHandler={this.onChangeHandler}
           onSaveHandler={this.onSaveHandler}
+          newScan={this.state.newScan}
+          onSetNewScanMode={this.onSetNewScanMode}         
+          onAddNewScanHandler={this.onAddNewScanHandler}
         />
       </div>
     );

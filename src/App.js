@@ -3,7 +3,6 @@ import './App.css';
 import ScanContainer from "./ScanContainer";
 
 class App extends Component {
-
     render() {
         return (
             <div className="App">
