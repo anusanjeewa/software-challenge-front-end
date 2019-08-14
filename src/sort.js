@@ -18,7 +18,7 @@ export const compareValues = fieldName => {
 
 export const getFlattenData = (scans, users) => {
   const flattenArray = scans.map((scan, i) => {
-      const user = users.find(u => u.id === scan.scannedByUserId);
+      const user = users.find(u => u.id === parseInt(scan.scannedByUserId));
       return {
         scanIndex: i,
         name: scan.name,

@@ -38,15 +38,27 @@ class ScanContainer extends React.Component {
       editMode: true
     });
   };
-
   onChangeHandler = fieldName => value => {
-    this.setState({
-      ...this.state,
-      editData: {
-        ...this.state.editData,
-        [fieldName]: value
-      }
-    });
+    if (fieldName === 'scannedByUserId') {      
+      const user = this.state.users.find(u => u.id === parseInt(value));
+      this.setState({
+        ...this.state,
+        editData: {
+          ...this.state.editData,
+          scannedByUserId: parseInt(value),
+          username: user.name        
+        }
+      });
+    }
+    else {
+      this.setState({
+        ...this.state,
+        editData: {
+          ...this.state.editData,
+          [fieldName]: value
+        }
+      });
+    }    
   };
   onSaveHandler = () => { 
     const updatedScans = [
@@ -84,21 +96,25 @@ class ScanContainer extends React.Component {
     });
   };
   onSetNewScanMode = (mode) => {   
+    const usernameDefault = this.state.users[0];
     this.setState({
       ...this.state,
-      newScan: mode
+      newScan: mode,
+      editData: {
+        ...this.state.editData,
+        scannedByUserId: 0,
+        username: usernameDefault
+      }
     });
    };
-
   onAddNewScanHandler = () => {
-    alert(this.state.editData.scannedByUserId);
     const currScans = this.state.scans;    
     const updatedScans = currScans.concat([
       {
         name: this.state.editData.name,
         elevationMax: this.state.editData.elevationMax,
         elevationMin: this.state.editData.elevationMin,
-        scannedByUserId: 0
+        scannedByUserId: this.state.editData.scannedByUserId
       }
     ]);
     const newSortedArray = getFlattenData(updatedScans, this.state.users);
@@ -109,7 +125,6 @@ class ScanContainer extends React.Component {
       sortedArray: newSortedArray,
       newScan: false
     })
-
   };
 
   render() {

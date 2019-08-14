@@ -5,7 +5,7 @@ const NewScan = props => {
   return (
     <div>
       <table>
-        <tbody className="Label">
+        <tbody> 
           <tr>
             <td>
               <label> Scan Name </label>
@@ -50,14 +50,19 @@ const NewScan = props => {
             <td>
               <label> User </label>
             </td>
-            <td>
-              <select>
-                {props.users.map((user) => {
-                 return ( <option
-                    value={user.id}
-                    onSelect={e =>
-                      props.onChangeHandler("user")(e.target.value)
-                    }
+            <td className="dropdown">
+              <select
+              className="dropdown"
+              onChange={e =>{
+                e.preventDefault();
+                props.onChangeHandler("scannedByUserId")(e.target.value)}
+              }
+              >
+                {props.users.map((user, i) => {
+                 return ( 
+                 <option
+                    key={i}
+                    value={user.id}                    
                   >
                     {user.name}
                   </option>
@@ -67,18 +72,24 @@ const NewScan = props => {
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td> 
+                  
+            </td>
+          </tr>
+          <tr>
             <td />
             <td>
               <button
-                className="btn btn-primary"
+                className="button"
                 onClick={props.onAddNewScanHandler}
               >
                 Save
               </button>
               {"   "}
               <button
-                className="btn btn-primary"
-                onClick={() => this.props.onSetNewScanMode(false)}
+                className="button"
+                onClick={() => props.onSetNewScanMode(false)}
               >
                 Cancel
               </button>
@@ -92,8 +103,3 @@ const NewScan = props => {
 
 export default NewScan;
 
-/**
- 
- 
-      
- */

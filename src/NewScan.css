@@ -2,3 +2,12 @@
     font-size: calc(9px + 1vmin);
     text-align: right;
 }
+.button{
+    font-family:'Times New Roman', Times, serif;
+    font-size: calc(8px + 0.7vmin);
+    color: rgb(2, 46, 31);
+}
+.dropdown {
+    font-family:'Times New Roman', Times, serif;
+    font-size: calc(8px + 0.7vmin);
+}

@@ -6,12 +6,12 @@ import NewScan from "./NewScan";
 class ScanList extends React.Component {
   render() {
     return (
-      <div>
+      <div className="ScanContainer">
         <div className="Header">Scans</div>
         <div className="ScanList">
-          <div className="ScanListItem">
-            <table className="table ">
-              <thead>
+          <div>
+            <table>
+              <thead className="Table-Header">
                 <tr>
                   <th onClick={() => this.props.onSortHandler("name")}>Name</th>
                   <th onClick={() => this.props.onSortHandler("elevationMax")}>
@@ -28,16 +28,16 @@ class ScanList extends React.Component {
               </thead>
               {this.props.sortedArray.map((scan, i) => {
                 return (
-                  <tbody className="ScanListRow">
+                  <tbody>
                     <tr key={i}>
                       <td>{scan.name}</td>
-                      <td>{scan.elevationMax}</td>
-                      <td>{scan.elevationMin}</td>
+                      <td className="ScanListItem">{scan.elevationMax}</td>
+                      <td className="ScanListItem">{scan.elevationMin}</td>
                       <td>{scan.username}</td>
                       <td>
                         <div>
                           <button
-                            className="btn btn-default "
+                            className="button"
                             id={"button" + i}
                             disabled={this.props.editMode}
                             onClick={() =>
@@ -55,12 +55,19 @@ class ScanList extends React.Component {
             </table>
           </div>
         </div>
-        <div>
-          <button onClick={() => this.props.onSetNewScanMode(true)}>
-            {" "}
-            Add new Record{" "}
-          </button>
-        </div>
+        <div />
+        {!this.props.editMode && (
+          <div className="ScanList">
+            <button
+              className="button"
+              onClick={() => this.props.onSetNewScanMode(true)}
+            >
+              {" "}
+              Add new Record{" "}
+            </button>
+          </div>
+        )}
+        <div className="SpaceBetween" />
         {this.props.newScan && (
           <div className="ScanList">
             <NewScan
@@ -72,9 +79,10 @@ class ScanList extends React.Component {
             />
           </div>
         )}
-        <div>
-          {this.props.editMode && (
-            <div className="editList">
+        <div className="SpaceBetween" />
+        {this.props.editMode && (
+          <div className="EditPanel">
+            <div>
               <EditPanel
                 editData={this.props.editData}
                 editMode={this.props.editMode}
@@ -82,27 +90,10 @@ class ScanList extends React.Component {
                 onSaveHandler={this.props.onSaveHandler}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   }
 }
-
 export default ScanList;
-
-/**
- <div className="ScanList">
-          {this.props.scans.map((scan, i) => {
-            const user = this.props.users.find(
-              u => u.id === scan.scannedByUserId
-            );
-            return (
-              <div className="ScanListItem" key={i}>
-                {scan.name}
-                <div className="UserName">by {user.name}</div>
-              </div>
-            );
-          })}
-        </div>
- */
