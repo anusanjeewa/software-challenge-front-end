@@ -1,49 +1,101 @@
 import React from "react";
 import ScanList from "./ScanList";
 import { createScanData, createUserData } from "./data";
-import {compareValues} from './sort';
+import { compareValues, getFlattenData } from "./sort";
 
 class ScanContainer extends React.Component {
   state = {
     scans: createScanData(),
     users: createUserData(),
-    sortedArray: [],
+    sortedArray: getFlattenData(createScanData(), createUserData()),
+    editData: {
+      scanIndex: "",
+      name: "",
+      elevationMax: "",
+      elevationMin: "",
+      scannedByUserId: "",
+      username: ""
+    },
+    editMode: false,
   };
-
-  getFlattenData = () => {
-    const flattenArray = this.state.scans.map((scan, i) => {
-        const user = this.state.users.find(u => u.id === scan.scannedByUserId);
-        return {
-          id: i,
-          name: scan.name,
-          elevationMax: scan.elevationMax,
-          elevationMin: scan.elevationMin,
-          scannedByUserId: scan.scannedByUserId,
-          username: user.name
-        };
-      });
-      return flattenArray;
-  };
-
   onSortHandler = sortBy => {
     this.setState({
       ...this.state,
-      sortedArray: this.getFlattenData().sort(compareValues(sortBy))
+      sortedArray: getFlattenData(this.state.scans, this.state.users).sort(
+        compareValues(sortBy)
+      ),
+      sortedBy: sortBy,
     });
   };
-
+  onEditHandler = id => {
+     const editRecord = this.state.sortedArray.find(
+      data => data.scanIndex === id
+    );
+    this.setState({
+      ...this.state,
+      editData: editRecord,
+      editMode: true
+    });
+  };
+  onChangeHandler = fieldName => value => {
+    this.setState({
+      ...this.state,
+      editData: {
+        ...this.state.editData,
+        [fieldName]: value
+      }
+    });
+  };
+  onSaveHandler = () => { 
+    const updatedScans = [
+      ...this.state.scans.slice(0, this.state.editData.scanIndex),
+      {
+        name: this.state.editData.name,
+        elevationMax: this.state.editData.elevationMax,
+        elevationMin: this.state.editData.elevationMin,
+        scannedByUserId: this.state.editData.scannedByUserId
+      },
+      ...this.state.scans.slice(this.state.editData.scanIndex + 1)
+    ];
+    const updatedUsers = [
+      ...this.state.users.slice(0, this.state.editData.scannedByUserId),
+      {
+        id: this.state.editData.scannedByUserId,
+        name: this.state.editData.username
+      },
+      ...this.state.users.slice(this.state.editData.scannedByUserId + 1)
+    ];
+    const newSortedArray = getFlattenData(updatedScans, updatedUsers);
+    this.setState({
+      ...this.state,
+      scans: updatedScans,
+      users: updatedUsers,
+      sortedArray: newSortedArray,
+      editMode: false,
+      editData: {
+        scanIndex: "",
+        name: "",
+        elevationMax: "",
+        elevationMin: "",
+        scannedByUserId: "",
+        username: ""}
+    });
+  };
   render() {
     return (
       <div>
         <ScanList
-          scans={this.state.scans}
-          users={this.state.users}  
           sortedArray={
             this.state.sortedArray.length > 0
               ? this.state.sortedArray
               : this.getFlattenData()
           }
           onSortHandler={this.onSortHandler}
+          onEditHandler={this.onEditHandler}
+          editData={this.state.editData}
+          editMode={this.state.editMode}
+          onChangeHandler={this.onChangeHandler}
+          onSaveHandler={this.onSaveHandler}
         />
       </div>
     );

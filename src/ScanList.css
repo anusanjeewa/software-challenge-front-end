@@ -27,3 +27,12 @@
     background-color: rgba(147, 144, 151, 0.863);
     font-size: 8px;
 }
+
+.editList {
+    margin-top: 50px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 9px;
+    max-width: 600px;
+    margin: 50px auto;
+    border-style: solid;
+}

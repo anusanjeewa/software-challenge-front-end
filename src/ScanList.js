@@ -1,5 +1,6 @@
 import React from "react";
 import "./ScanList.css";
+import EditPanel from "./EditPanel";
 
 class ScanList extends React.Component {
   render() {
@@ -33,8 +34,17 @@ class ScanList extends React.Component {
                       <td>{scan.elevationMin}</td>
                       <td>{scan.username}</td>
                       <td>
-                        <div >
-                          <button  className="buttonEdit " id={'button' + i}>Edit</button>
+                        <div>
+                          <button
+                            className="btn btn-default "
+                            id={"button" + i}
+                            disabled={this.props.editMode}
+                            onClick={() =>
+                              this.props.onEditHandler(scan.scanIndex)
+                            }
+                          >
+                            Edit
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -43,6 +53,18 @@ class ScanList extends React.Component {
               })}
             </table>
           </div>
+        </div>
+        <div>
+          {this.props.editMode && (
+            <div className="editList">
+            <EditPanel
+              editData={this.props.editData}
+              editMode={this.props.editMode}
+              onChangeHandler={this.props.onChangeHandler}
+              onSaveHandler={this.props.onSaveHandler}
+            />
+            </div>
+          )}
         </div>
       </div>
     );
